@@ -1,10 +1,9 @@
 from PIL import Image
 from PIL.ExifTags import TAGS
-from pathlib import Path, PurePath
-import os
+from pathlib import  PurePath
 
 class metaimg:
-    def __init__(self,image_path) -> None:
+    def __init__(self,image_path) :
         self.image = image_path
 
         u_image = Image.open(self.image)
@@ -16,6 +15,7 @@ class metaimg:
             tag = TAGS.get(tag_id, tag_id)
             data = exifdata.get(tag_id)
             self.meta.append([tag,data])
+
         if len(self.meta) == 0:
             self.meta = None
     
@@ -41,7 +41,7 @@ class metaimg:
 
         
 if __name__ == "__main__":
-    test_images = [
+    test_images = [ 
                     PurePath('./test_images/1.jpg'),
                     PurePath('./test_images/5.jpg'),
                   ]
