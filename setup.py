@@ -11,7 +11,7 @@ setuptools.setup(
     description="A package to read metadata of images and create clean copies",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Sidharth-S",
+    url="https://github.com/Sidharth-S/metaimg",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
