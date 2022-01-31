@@ -1,4 +1,5 @@
 from logging import exception
+from xml.dom import ValidationErr
 from PIL import Image
 from PIL.ExifTags import TAGS
 from pathlib import  PurePath
@@ -9,10 +10,14 @@ class metaimg:
 
         self.image = PurePath(image_path)
 
+        if self.image.suffix not in [".jpg",".jpeg",".png",".raw",".dng"]:
+            raise ValueError("Error: File not an image format")
+
 
         u_image = Image.open(str(self.image))
         exifdata = u_image.getexif()
 
+        # List storing the metadata of the image (self.image)
         self.meta = []
 
         for tag_id in exifdata:
@@ -23,20 +28,25 @@ class metaimg:
         if len(self.meta) == 0:
             self.meta = None
     
-    def cleanimage(self,replace = False):
+    def cleanimage(self,replace = False,fp = None):
         im1 = Image.open(str(self.image))
         im2 = im1.copy()
         
-        fp = self.image
-        
+
+        temp_fp = self.image
+
         if replace == True :
-            im2.save(str(fp))
+            im2.save(str(temp_fp))
             return
 
-        directory = fp.parent
-        fname = f"Clean - {fp.name}"
-        new_path = str(directory.joinpath(fname))
-        im2.save(new_path)
+        directory = temp_fp.parent
+        fname = f"Clean - {temp_fp.name}"
+        save_path = str(directory.joinpath(fname))
+
+        # If fp has been provided
+        if fp : save_path = fp
+
+        im2.save(save_path)
 
         return 
 
@@ -66,11 +76,10 @@ class metaimg:
 if __name__ == "__main__":
     test_images = [ 
                     PurePath('src/metaimg/1.jpg'),
-                    #PurePath('./test_images/5.jpg'),
                   ]
 
     for i in test_images:
         x = metaimg(image_path = str(i))
         #x.metacsv(fp="tests/123.csv")
-        #x.cleanimage(replace=True)
+        x.cleanimage(replace=True)
         print("")
