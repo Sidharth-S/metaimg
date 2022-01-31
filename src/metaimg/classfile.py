@@ -9,6 +9,7 @@ class metaimg:
 
         self.image = PurePath(image_path)
 
+
         u_image = Image.open(str(self.image))
         exifdata = u_image.getexif()
 
@@ -26,8 +27,8 @@ class metaimg:
         im1 = Image.open(str(self.image))
         im2 = im1.copy()
         
-        fp = PurePath(self.image)
-
+        fp = self.image
+        
         if replace == True :
             im2.save(str(fp))
             return
@@ -36,6 +37,7 @@ class metaimg:
         fname = f"Clean - {fp.name}"
         new_path = str(directory.joinpath(fname))
         im2.save(new_path)
+
         return 
 
     def metacsv(self, fp = None):
