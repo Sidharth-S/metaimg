@@ -1,4 +1,4 @@
-from tkinter.tix import DirSelectBox
+from logging import exception
 from PIL import Image
 from PIL.ExifTags import TAGS
 from pathlib import  PurePath
@@ -38,7 +38,7 @@ class metaimg:
         im2.save(new_path)
         return 
 
-    def metacsv(self):
+    def metacsv(self, fp = None):
         fields = ["Tag" , "Value"]
         rows = self.meta
         
@@ -46,11 +46,17 @@ class metaimg:
         filename = f"csv {self.image.stem}.csv"
         filename = str(directory.joinpath(filename))
 
-        with open(filename, 'w') as csvfile: 
-            csvwriter = csv.writer(csvfile) 
-            csvwriter.writerow(fields) 
-            csvwriter.writerows(rows)
-        
+        if fp:
+            filename = fp
+
+        try:
+            with open(filename, 'w') as csvfile: 
+                csvwriter = csv.writer(csvfile) 
+                csvwriter.writerow(fields) 
+                csvwriter.writerows(rows)
+        except  exception as e :
+            raise RuntimeError("Error. Unable to create csv")
+
         return
 
 
@@ -63,6 +69,6 @@ if __name__ == "__main__":
 
     for i in test_images:
         x = metaimg(image_path = str(i))
-        x.metacsv()
+        #x.metacsv(fp="tests/123.csv")
         #x.cleanimage(replace=True)
         print("")
