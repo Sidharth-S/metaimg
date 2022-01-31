@@ -1,12 +1,15 @@
+from tkinter.tix import DirSelectBox
 from PIL import Image
 from PIL.ExifTags import TAGS
 from pathlib import  PurePath
+import csv
 
 class metaimg:
     def __init__(self,image_path) :
-        self.image = image_path
 
-        u_image = Image.open(self.image)
+        self.image = PurePath(image_path)
+
+        u_image = Image.open(str(self.image))
         exifdata = u_image.getexif()
 
         self.meta = []
@@ -20,7 +23,7 @@ class metaimg:
             self.meta = None
     
     def cleanimage(self,replace = False):
-        im1 = Image.open(self.image)
+        im1 = Image.open(str(self.image))
         im2 = im1.copy()
         
         fp = PurePath(self.image)
@@ -36,18 +39,30 @@ class metaimg:
         return 
 
     def metacsv(self):
+        fields = ["Tag" , "Value"]
+        rows = self.meta
+        
+        directory = self.image.parent
+        filename = f"csv {self.image.stem}.csv"
+        filename = str(directory.joinpath(filename))
+
+        with open(filename, 'w') as csvfile: 
+            csvwriter = csv.writer(csvfile) 
+            csvwriter.writerow(fields) 
+            csvwriter.writerows(rows)
+        
         return
 
 
         
 if __name__ == "__main__":
     test_images = [ 
-                    PurePath('./test_images/1.jpg'),
-                    PurePath('./test_images/5.jpg'),
+                    PurePath('src/metaimg/1.jpg'),
+                    #PurePath('./test_images/5.jpg'),
                   ]
 
     for i in test_images:
         x = metaimg(image_path = str(i))
-        print(x.meta)
+        x.metacsv()
         #x.cleanimage(replace=True)
         print("")
