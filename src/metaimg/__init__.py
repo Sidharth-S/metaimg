@@ -1,2 +1,2 @@
-from classfile import metaimg
+from classfile import metareader
 # from file import class

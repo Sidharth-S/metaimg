@@ -5,7 +5,7 @@ from PIL.ExifTags import TAGS
 from pathlib import  PurePath
 import csv
 
-class metaimg:
+class metareader:
     def __init__(self,image_path) :
 
         self.image = PurePath(image_path)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
                   ]
 
     for i in test_images:
-        x = metaimg(image_path = str(i))
+        x = metareader(image_path = str(i))
         #x.metacsv(fp="tests/123.csv")
         x.cleanimage(replace=True)
         print("")
